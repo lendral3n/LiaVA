@@ -1,0 +1,10 @@
+# Python files
+*.pyc
+__pycache__/
+
+# Log files
+static/logs/*
+static/audio/*
+
+# Environment
+.env
