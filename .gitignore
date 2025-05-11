@@ -3,8 +3,10 @@
 __pycache__/
 
 # Log files
-static/logs/*
-static/audio/*
+static/
 
 # Environment
 .env
+
+.venv
+venv
