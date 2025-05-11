@@ -4,9 +4,20 @@ __pycache__/
 
 # Log files
 static/
-assets/
 # Environment
 .env
 
 .venv
 venv
+
+[Libraries]
+Library/
+Logs/
+Temp/
+Obj/
+*.csproj
+*.unityproj
+*.sln
+*.user
+.vscode/
+UserSettings/

@@ -1,1 +1,1 @@
-# L3nSync-Virtual-Assistant
+# LiaVA
