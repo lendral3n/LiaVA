@@ -6,20 +6,30 @@ WORKDIR /app/web
 RUN npm install && npm run build
 
 # ----------- Stage 2: Setup backend -----------
+# Base image
 FROM python:3.10-slim
+
+# Set working directory
 WORKDIR /app
 
-# Copy backend
-COPY backend/ ./backend
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    build-essential \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy built frontend
-COPY --from=frontend /app/web/dist ./web_dist
+# Salin requirements dan install
+COPY requirements.txt .
 
-# Install Python deps
-RUN pip install --no-cache-dir -r backend/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port (sesuai backend)
+# Salin semua file ke container
+COPY . .
+
+# Expose port (ganti jika tidak pakai 8000)
 EXPOSE 8000
 
-# Run backend, pastikan backend bisa sajikan file frontend (di web_dist)
-CMD ["uvicorn", "backend.run:app", "--host", "0.0.0.0", "--port", "8000"]
+# Jalankan aplikasi
+CMD ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8000"]
