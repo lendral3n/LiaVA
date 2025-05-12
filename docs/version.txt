@@ -1,0 +1,43 @@
+✅ V0 - Versi Dasar (Minimum Viable Product)
+
+🔧 Backend
+	•	REST API endpoint /ask → menerima pertanyaan dan membalas pakai GPT (OpenAI API / local)
+	•	Integrasi TTS (Text to Speech) → misalnya ElevenLabs / Coqui
+	•	Integrasi STT (Speech to Text) → misalnya OpenAI Whisper
+	•	Simple audio pipeline (mic input → STT → GPT → TTS)
+	•	Endpoint /mode untuk mengatur mode: voice_button atau wake_word
+	•	Logging percakapan untuk debugging dan training lanjut
+	•	Support CORS untuk frontend
+
+🌐 Frontend / Web
+	•	Tampilan karakter VRM (pakai Three.js atau Unity WebGL embed)
+	•	UI tombol untuk “Start Voice” dan “Stop”
+	•	Tampilan hasil percakapan (chat log)
+	•	Komponen ModeMenu → pilihan mode voice button vs wake word
+	•	Indikator mic aktif (visual waveform atau animasi ikon)
+	•	Integrasi audio input dari browser mic
+	•	Pemanggilan backend API /ask dan /tts
+	•	Render suara kembali dari TTS
+	•	Lip sync dasar VRM dari audio
+
+
+🚀 V1 - Versi Lanjut (Smart Assistant Experience)
+
+🔧 Backend
+	•	Wake word detection (via Porcupine, Snowboy, atau whisper-segmen)
+	•	Conversational memory (short-term context dalam session)
+	•	Dynamic Persona (ubah gaya bahasa dari param: formal, santai, ceria)
+	•	Plugin support (cuaca, kalkulator, kalender, dll.)
+	•	Endpoint /plugin/weather, /plugin/news, /plugin/calendar
+	•	Middleware anti-spam / rate limit per session
+	•	Multi-user session/token auth
+
+🌐 Frontend / Web
+	•	Ekspresi karakter berdasarkan emosi GPT (senyum, bingung, dll.)
+	•	Ubah voice assistant (pilih suara TTS dari UI)
+	•	Wake word aktif terus (mode pasif, animasi idle)
+	•	Chat log lengkap + download percakapan
+	•	Komponen “Command Panel” untuk fitur cepat: Open app, Play music, Search, dll
+	•	Tema UI personalisasi (dark/light/futuristic)
+	•	Tooltip bantuan dan intro pertama kali
+	•	Volume control dan mute
