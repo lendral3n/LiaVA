@@ -54,7 +54,7 @@ cd backend
 python -m venv venv
 source venv/bin/activate  # Untuk Windows: venv\\Scripts\\activate
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn run:app --reload
 ```
 
 ### 3. Menjalankan Frontend
@@ -101,18 +101,10 @@ Dokumentasi lengkap tersedia di folder `docs/`. Termasuk:
 
 Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
----
-
-## 🙌 Kontribusi
-
-Terima kasih kepada semua kontributor yang telah membantu dalam pengembangan LiaVA.
-
----
-
 ## 📬 Kontak
 
 Untuk pertanyaan atau saran, silakan hubungi:
 
 - **Nama**: Lendra Syaputra
-- **Email**: [email@example.com](mailto:l3nteam@gmail.com)
+- **Email**: [l3nteam@gmail.com](mailto:l3nteam@gmail.com)
 - **GitHub**: [@lendral3n](https://github.com/lendral3n)
