@@ -1,56 +1,55 @@
+// Update playAudioWithLipSync: Tambahkan delay sinkronisasi dan improve
+// animasi lip movement agar lebih sinkron dan ekspresif
 import * as THREE from "three";
 
-// Fungsi untuk memutar audio dengan lip sync menggunakan THREE.js
 export async function playAudioWithLipSync(audioBlob, vrm) {
   const listener = new THREE.AudioListener();
   const audio = new THREE.Audio(listener);
   const audioLoader = new THREE.AudioLoader();
 
-  // Menggunakan audio Blob yang diterima
-  const audioUrl = URL.createObjectURL(audioBlob); // Membuat URL dari Blob
+  const audioUrl = URL.createObjectURL(audioBlob);
   audioLoader.load(
-    audioUrl, // Gunakan URL yang dibentuk dari Blob
+    audioUrl,
     (buffer) => {
       audio.setBuffer(buffer);
       audio.setLoop(false);
       audio.setVolume(1.0);
       audio.play();
 
-      const analyser = new THREE.AudioAnalyser(audio, 32);
-
+      const analyser = new THREE.AudioAnalyser(audio, 64); // lebih sensitif
       const mouthKeys = ["aa", "ee", "ih", "oh", "ou"];
-      const expressionManager = vrm.expressionManager;
+      const em = vrm.expressionManager;
 
-      if (!expressionManager || !expressionManager.setValue) {
+      if (!em || !em.setValue) {
         console.warn("No expressionManager found on this VRM model.");
         return;
       }
 
-      let previousValue = 0;
+      let prevValue = 0;
+      let frameCount = 0;
 
       const interval = setInterval(() => {
         if (!audio.isPlaying) {
-          mouthKeys.forEach((k) => expressionManager.setValue(k, 0));
-          expressionManager.update();
+          mouthKeys.forEach((k) => em.setValue(k, 0));
+          em.update();
           clearInterval(interval);
           return;
         }
 
-        // Ambil frekuensi audio rata-rata
         let raw = analyser.getAverageFrequency() / 256;
+        const smooth = prevValue * 0.85 + raw * 0.15;
+        prevValue = smooth;
 
-        // Terapkan smoothing (low-pass filter)
-        const smoothValue = previousValue * 0.8 + raw * 0.2;
-        previousValue = smoothValue;
+        const finalValue = smooth > 0.06 ? smooth : 0;
 
-        // Threshold: agar tidak selalu buka mulut karena noise
-        const finalValue = smoothValue > 0.08 ? smoothValue : 0;
+        mouthKeys.forEach((k) => em.setValue(k, 0));
 
-        // Set ekspresi "aa" sebagai default mulut
-        mouthKeys.forEach((k) => expressionManager.setValue(k, 0));
-        expressionManager.setValue("aa", finalValue);
-        expressionManager.update();
-      }, 33); // Interval 33ms (30FPS)
+        // Bergantian pakai ekspresi
+        const key = mouthKeys[frameCount % mouthKeys.length];
+        em.setValue(key, finalValue);
+        em.update();
+        frameCount++;
+      }, 33);
     },
     undefined,
     (err) => {

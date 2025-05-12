@@ -1,11 +1,7 @@
 import { initScene, loadVRMModel, focusCameraToFace } from "./logic/vrmLoader";
 import { askAI } from "./logic/api";
 import { playAudioWithLipSync } from "./logic/loadAudio";
-import {
-  applyRelaxedPose,
-  startIdleLoop,
-  setupAutoBlink,
-} from "./logic/vrmPoseManager";
+import { animateIdleBones, runFacialExpressionLoop } from "./logic/vrmPoseManager";
 
 const { scene, camera, renderer } = initScene("viewer");
 let loadedVrm = null;
@@ -16,20 +12,23 @@ console.log("🔍 Loading:", modelPath);
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  
 }
 
 loadVRMModel(scene, modelPath, (vrm) => {
   loadedVrm = vrm;
   scene.add(vrm.scene);
 
-  vrm.humanoid.resetNormalizedPose();
+  // console.log("🦴 All Humanoid Bones:");
+  // for (const boneName of Object.keys(loadedVrm.humanoid.humanBones)) {
+  //   const node = loadedVrm.humanoid.getNormalizedBoneNode(boneName);
+  //   if (node) {
+  //     console.log(`- ${boneName}`, node);
+  //   }
+  // }
 
   focusCameraToFace(vrm, camera);
-  
-  applyRelaxedPose(vrm);
-  startIdleLoop(vrm);
-  setupAutoBlink(vrm);
+  runFacialExpressionLoop(vrm);
+  animateIdleBones(vrm);
   animate();
 });
 
