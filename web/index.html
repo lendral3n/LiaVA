@@ -17,10 +17,15 @@
     <!-- 3D Model Canvas -->
     <canvas id="viewer"></canvas>
 
-    <!-- Chat UI -->
-    <div id="chatBox">
-      <input id="chatInput" type="text" placeholder="Say something..." />
-      <button id="sendBtn">Send</button>
+    <!-- Mode Switch -->
+    <div id="modeMenu">
+      <label><input type="radio" name="mode" value="voice" checked /> Voice Mode</label>
+      <label><input type="radio" name="mode" value="call" /> Call by Name</label>
+    </div>
+
+    <!-- Voice Trigger -->
+    <div id="voiceBox">
+      <button id="voiceBtn">🎙️ Talk</button>
     </div>
 
     <script type="module" src="/src/main.js"></script>
