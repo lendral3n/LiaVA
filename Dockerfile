@@ -1,37 +1,36 @@
-# ----------- Stage 1: Build frontend -----------
-FROM node:18 as frontend
+# ----------- Stage 1: Build Frontend with Vite -----------
+FROM node:18 AS frontend
 WORKDIR /app/web
-COPY web/ ./  # Salin folder `web`
+COPY web/ .
 RUN npm install && npm run build
 
-# ----------- Stage 2: Backend (Python + FastAPI) -----------
-FROM python:3.10-slim
+# ----------- Stage 2: Build Backend with FastAPI -----------
+FROM python:3.10-slim AS backend
 
-# Working dir backend
+# Set working directory
 WORKDIR /app
 
-# Install sistem dependencies minimum
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    gcc build-essential libffi-dev \
+    gcc \
+    build-essential \
+    libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Salin requirement & install python packages
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy backend code
+COPY backend/ ./backend
+COPY backend/requirements.txt ./
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Salin seluruh backend
-COPY backend/ ./backend/
-COPY run.py .  # Jika kamu punya file run.py untuk uvicorn entry point
+# Copy run.py to root
+COPY run.py ./
 
-# Salin hasil build frontend
-COPY --from=frontend /app/web/dist ./frontend-dist
+# Copy frontend build to serve as static assets
+COPY --from=frontend /app/web/dist ./web_dist
 
-# Environment (Railway akan inject ENV, tidak perlu copy .env)
-ENV PORT=8000
-
-# Expose port (Railway gunakan 8000 by default)
+# Expose the FastAPI app port
 EXPOSE 8000
 
-# Jalankan aplikasi FastAPI
+# Run the FastAPI app
 CMD ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8000"]
