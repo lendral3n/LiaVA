@@ -22,7 +22,7 @@ LiaVA/
 ├── character/        # Model karakter VRM dan aset terkait
 ├── docs/             # Dokumentasi proyek
 ├── unity/            # Proyek Unity untuk karakter VRM
-├── web/              # Antarmuka web (React.js)
+├── web/              # Antarmuka web 
 ├── .gitignore
 └── README.md
 ```
