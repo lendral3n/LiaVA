@@ -41,40 +41,42 @@ canvas {
   z-index: 3; /* PASTIKAN DI ATAS BACKGROUND */
 }
 
-/* Chat input & button */
-#chatBox {
+/* Mode selector */
+#modeMenu {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 8px 16px;
+  border-radius: 8px;
+  z-index: 100;
+  font-size: 14px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+#modeMenu label {
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+/* Voice Button */
+#voiceBox {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 10px;
-  border-radius: 10px;
   z-index: 100;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-#chatInput {
-  width: 300px;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-#sendBtn {
-  padding: 8px 16px;
+#voiceBtn {
+  padding: 10px 24px;
   font-size: 1rem;
   background-color: #4a4af4;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
-#sendBtn:hover {
+#voiceBtn:hover {
   background-color: #3737d3;
 }

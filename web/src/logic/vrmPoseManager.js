@@ -6,6 +6,8 @@ function bone(vrm, name) {
   return vrm?.humanoid?.getNormalizedBoneNode(name);
 }
 
+let isTalking = false; // <-- Global flag to indicate AI is speaking
+
 export function runFacialExpressionLoop(vrm) {
   const em = vrm.expressionManager;
   if (!em || typeof em.setValue !== "function") return;
@@ -21,11 +23,6 @@ export function runFacialExpressionLoop(vrm) {
   const resetAllExpressions = () => {
     const keys = [
       "neutral",
-      "aa",
-      "ih",
-      "ou",
-      "ee",
-      "oh",
       "blink",
       "happy",
       "angry",
@@ -45,47 +42,47 @@ export function runFacialExpressionLoop(vrm) {
     requestAnimationFrame(animate);
     const time = clock.getElapsedTime();
 
-    // Blink
-    if (time > expressions.blink.next) {
-      em.setValue("blink", 1);
-      em.setValue("blinkLeft", 1);
-      em.setValue("blinkRight", 1);
-      em.update();
-      setTimeout(() => {
-        em.setValue("blink", 0);
-        em.setValue("blinkLeft", 0);
-        em.setValue("blinkRight", 0);
+    // Only run expressions when not talking
+    if (!isTalking) {
+      if (time > expressions.blink.next) {
+        em.setValue("blink", 1);
+        em.setValue("blinkLeft", 1);
+        em.setValue("blinkRight", 1);
         em.update();
-      }, 120);
-      expressions.blink.next = time + expressions.blink.interval();
-    }
-
-    // Mood-based expressions
-    ["happy", "sad", "angry"].forEach((exp) => {
-      if (time > expressions[exp].next) {
-        resetAllExpressions();
-        em.setValue(exp, 1);
-        em.update();
-        expressions[exp].next = time + 15;
         setTimeout(() => {
-          em.setValue(exp, 0);
+          em.setValue("blink", 0);
+          em.setValue("blinkLeft", 0);
+          em.setValue("blinkRight", 0);
           em.update();
-        }, expressions[exp].duration * 1000);
+        }, 120);
+        expressions.blink.next = time + expressions.blink.interval();
       }
-    });
 
-    // Look around
-    if (time > expressions.lookAround.next) {
-      const dir = ["lookUp", "lookDown", "lookLeft", "lookRight"][
-        Math.floor(Math.random() * 4)
-      ];
-      em.setValue(dir, 1);
-      em.update();
-      setTimeout(() => {
-        em.setValue(dir, 0);
+      ["happy", "sad", "angry"].forEach((exp) => {
+        if (time > expressions[exp].next) {
+          resetAllExpressions();
+          em.setValue(exp, 1);
+          em.update();
+          expressions[exp].next = time + 15;
+          setTimeout(() => {
+            em.setValue(exp, 0);
+            em.update();
+          }, expressions[exp].duration * 1000);
+        }
+      });
+
+      if (time > expressions.lookAround.next) {
+        const dir = ["lookUp", "lookDown", "lookLeft", "lookRight"][
+          Math.floor(Math.random() * 4)
+        ];
+        em.setValue(dir, 1);
         em.update();
-      }, expressions.lookAround.duration * 1000);
-      expressions.lookAround.next = time + 7;
+        setTimeout(() => {
+          em.setValue(dir, 0);
+          em.update();
+        }, expressions.lookAround.duration * 1000);
+        expressions.lookAround.next = time + 7;
+      }
     }
   }
 
@@ -98,17 +95,15 @@ export function animateIdleBones(vrm) {
   const chest = bone(vrm, "chest");
   const spine = bone(vrm, "spine");
 
-  // console.log("🚀 animateIdleBones dipanggil");
-
   function idleMotion() {
     requestAnimationFrame(idleMotion);
     const t = clock.getElapsedTime();
 
     if (head) {
       head.rotation.set(
-        Math.sin(t * 0.8) * 0.03, // angguk
-        Math.sin(t * 1.5) * 0.04, // geleng
-        Math.sin(t * 0.5) * 0.02 // miring kepala sedikit
+        Math.sin(t * 0.8) * 0.03,
+        Math.sin(t * 1.5) * 0.04,
+        Math.sin(t * 0.5) * 0.02
       );
       head.updateMatrixWorld(true);
     }
