@@ -46,5 +46,5 @@ ENV PYTHONPATH=/app/backend
 # Expose port
 EXPOSE 8000
 
-# Run app from run.py (which imports app from api.ai_response)
-CMD ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run app 
+CMD ["python", "run.py"]
