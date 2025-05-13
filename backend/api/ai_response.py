@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 app = FastAPI()
-app.mount("/", StaticFiles(directory="web_dist", html=True), name="static")
+app.mount("/", StaticFiles(directory="../web_dist", html=True), name="static")
 
 app.add_middleware(
     CORSMiddleware,
