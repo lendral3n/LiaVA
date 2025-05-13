@@ -1,5 +1,5 @@
 export async function askAI(question) {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/ask`, {
+  const res = await fetch(`https://lia-va.up.railway.app/api/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question }),
