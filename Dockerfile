@@ -36,6 +36,7 @@ WORKDIR /app/backend
 
 # Set ENV flags
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app/backend
 
 # Expose port
 EXPOSE 8000
