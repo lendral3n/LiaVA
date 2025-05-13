@@ -1,4 +1,4 @@
-# LiaVA – Virtual Assistant dengan GPT & VRM
+# LiaVA – Virtual Assistant
 🚀 Live Demo: [Lia-VA](https://lia-va.up.railway.app/)
 
 LiaVA adalah proyek asisten virtual berbasis AI yang menggabungkan teknologi GPT untuk percakapan alami, karakter 3D VRM untuk interaksi visual, serta antarmuka web yang interaktif. Proyek ini dirancang untuk memberikan pengalaman asisten pribadi yang imersif dan responsif.
