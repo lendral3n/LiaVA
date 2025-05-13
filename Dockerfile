@@ -18,22 +18,27 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy backend code
-COPY backend/ ./backend
-
-# Copy built frontend
-COPY --from=frontend /app/web/dist ./web_dist
-
-# Copy requirements & install dependencies
+# Copy requirements first (for caching layer)
 COPY backend/requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Set env (Railway akan inject otomatis .env di runtime)
+# Copy backend source code
+COPY backend/ ./backend
+
+# Copy frontend built output
+COPY --from=frontend /app/web/dist ./web_dist
+
+# Set working directory to backend
+WORKDIR /app/backend
+
+# Set ENV flags
 ENV PYTHONUNBUFFERED=1
 
 # Expose port
 EXPOSE 8000
 
-# Run FastAPI app
+# Run app from run.py (which imports app from api.ai_response)
 CMD ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8000"]
