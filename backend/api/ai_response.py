@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from service.gpt_service import get_gpt_response
 from service.tts_service import generate_voice_elevenlabs
@@ -7,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 app = FastAPI()
-app.mount("/", StaticFiles(directory="../web_dist", html=True), name="static")
 
 app.add_middleware(
     CORSMiddleware,
