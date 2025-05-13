@@ -1,5 +1,5 @@
 export async function askAI(question) {
-  const res = await fetch("http://127.0.0.1:8000/api/ask", {
+  const res = await fetch(`${import.meta.env.API_URL}/api/ask`, { {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question }),
