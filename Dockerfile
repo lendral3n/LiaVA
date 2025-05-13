@@ -3,6 +3,11 @@ FROM node:18 as frontend
 
 WORKDIR /app/web
 COPY web/ ./
+
+# Inject environment variables during build for Vite
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 RUN npm install && npm run build
 
 # ---------- Stage 2: Run Backend ----------
